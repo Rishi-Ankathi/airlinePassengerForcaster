@@ -338,7 +338,7 @@ st.write("Size:", model_path.stat().st_size)
 
 if st.button("Load Model"):
     try:
-        model = load_model(model_path, compile=False)
+        model = load_model("models/lstm_model.h5", compile=False)
     except Exception:
         st.code(traceback.format_exc())
         st.stop()

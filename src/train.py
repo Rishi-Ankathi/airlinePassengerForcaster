@@ -93,7 +93,8 @@ class ModelTrainer:
         # Step 7 : Save Model
         # ----------------------------
  
-        model.save("models/lstm_model.keras")
+        #model.save("models/lstm_model.keras")
+        model.save("models/lstm_model.h5")
  
         print("\nModel Saved Successfully.")
  
