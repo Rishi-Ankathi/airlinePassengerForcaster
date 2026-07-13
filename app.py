@@ -223,7 +223,8 @@ metric_col3.metric("End Date", summary["end"])
 tab1, tab2 = st.tabs(["🚀 Model Performance", "📈 Exploratory Data Analysis"])
 
 with tab1:
-    st.markdown('<div class="section-title">Model Accuracy Metrics</div>', unsafe_allow_html=True)
+    st.info("Temporarily disabled for debugging.")
+    '''st.markdown('<div class="section-title">Model Accuracy Metrics</div>', unsafe_allow_html=True)
     try:
         Path("outputs").mkdir(exist_ok=True)
         mae, mse, rmse = Evaluator().evaluate()
@@ -232,7 +233,7 @@ with tab1:
         m2.metric("Mean Squared Error (MSE)", f"{mse:.2f}")
         m3.metric("Root Mean Squared Error (RMSE)", f"{rmse:.2f}")
     except Exception as exc:
-        st.warning(f"Model metrics are not available yet: {exc}")
+        st.warning(f"Model metrics are not available yet: {exc}")'''
 
 with tab2:
     col_a, col_b = st.columns([1, 2])
