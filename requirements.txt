@@ -3,7 +3,10 @@ pandas==2.2.3
 plotly==6.9.0
 numpy==1.26.4
 scikit-learn==1.4.2
-tensorflow==2.17.1
+
+tensorflow==2.15.1
+keras==2.15.0
+
 joblib==1.4.0
 # allow pip to select an h5py compatible with tensorflow
 h5py>=3.10.0
