@@ -60,7 +60,15 @@ class Forecaster:
         print("Model size:", os.path.getsize(self.model_path))
 
 
-        model = load_model(self.model_path)
+        #model = load_model(self.model_path)
+        print("Before load")
+
+        model = load_model(
+            self.model_path,
+            compile=False
+        )
+
+        print("After load")
  
         # --------------------------
         # Load Scaler
