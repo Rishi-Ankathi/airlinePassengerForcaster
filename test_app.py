@@ -1,4 +1,5 @@
 import streamlit as st
+import traceback
 from tensorflow.keras.models import load_model
 from pathlib import Path
 
@@ -12,6 +13,9 @@ st.write("Size:", model_path.stat().st_size)
 if st.button("Load Model"):
     try:
         model = load_model(model_path, compile=False)
+    except Exception:
+        st.code(traceback.format_exc())
+        st.stop()
         st.success("Model loaded!")
         model.summary(print_fn=st.text)
     except Exception as e:
