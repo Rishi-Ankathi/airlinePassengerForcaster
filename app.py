@@ -20,44 +20,142 @@ def load_custom_css():
         """
         <style>
         .stApp {
-            background: #2F4F4F;
+            background: linear-gradient(135deg, #071120 0%, #0e1b2b 55%, #16253d 100%);
+            color: #e9f2ff;
         }
         .block-container {
-            padding-top: 1.5rem;
+            padding-top: 1.2rem;
             padding-bottom: 2rem;
         }
         .hero-card {
-            background: #C3B091;
-            padding: 1.4rem 1.6rem;
-            border-radius: 18px;
+            background:
+                radial-gradient(circle at top left, rgba(255,255,255,0.2), transparent 24%),
+                linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #38bdf8 100%);
+            padding: 2rem 2rem 1.7rem 2rem;
+            border-radius: 24px;
             color: white;
-            box-shadow: 0 8px 24px rgba(15, 91, 216, 0.18);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+        .hero-inner {
+            display: grid;
+            grid-template-columns: minmax(300px, 1.8fr) minmax(220px, 1fr);
+            gap: 1.8rem;
+            align-items: center;
+        }
+        .hero-copy {
+            min-width: 0;
+        }
+        .hero-right {
+            display: grid;
+            gap: 1rem;
+        }
+        .hero-stat {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 18px;
+            padding: 1.15rem 1rem;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+        }
+        .hero-stat h3 {
+            margin: 0;
+            color: #cfe6ff;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+        .hero-stat .value {
+            margin: 0.5rem 0 0;
+            font-size: 1.9rem;
+            font-weight: 800;
+            color: #ffffff;
+        }
+        .hero-callout {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.14);
+            border-radius: 18px;
+            padding: 1rem 1rem 0.95rem;
+            color: #eaf4ff;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+        }
+        .hero-callout p {
+            margin: 0.4rem 0 0;
+            opacity: 0.9;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .hero-card h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
+            letter-spacing: -0.02em;
+        }
+        .hero-card p {
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-bottom: 0;
+            max-width: 700px;
+        }
+        .hero-pill {
+            display: inline-block;
+            background: rgba(255,255,255,0.16);
+            color: white;
+            padding: 0.38rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.22);
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
         }
         .section-title {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            color: #C3B091;
-            margin-bottom: 0.3rem;
+            color: #EEDC82;
+            margin-bottom: 0.35rem;
+        }
+        .section-subtitle {
+            color: #b8d7ff;
+            margin-top: 0.15rem;
+            opacity: 0.82;
+            font-size: 0.95rem;
         }
         div[data-testid="stMetric"] {
-            background: #2A3439;
-            border: 1px solid #e5edf9;
+            background: #708090;
+            color: #10233f;
+            border: 1px solid rgba(255,255,255,0.14);
             border-radius: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            padding: 0.75rem 0.8rem;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+            padding: 0.7rem 0.8rem;
         }
         div.stButton > button:first-child {
-            background: linear-gradient(135deg, #0d6efd, #1d7ef5);
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             width: 100%;
+            padding: 0.55rem 0.8rem;
+            font-weight: 600;
         }
         div.stButton > button:first-child:hover {
-            background: linear-gradient(135deg, #0b5ed7, #0d6efd);
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
         }
         .sidebar .block-container {
             padding-top: 1rem;
+        }
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 0.35rem;
+        }
+        .stTabs [data-baseweb="tab"] {
+            border-radius: 999px;
+            padding: 0.45rem 0.8rem;
+            background: rgba(255,255,255,0.1);
+            color: #dfeeff;
+        }
+        .stTabs [aria-selected="true"] {
+            background: #2563eb;
+            color: white;
         }
         </style>
         """,
@@ -77,10 +175,11 @@ load_custom_css()
 
 with st.sidebar:
     st.image("assets/images.jpg", width=220, caption="Airline Passenger Forecasting")
-    st.title("Settings")
+    st.markdown("### Controls")
     future_months = st.slider("Forecast Horizon (Months)", 1, 24, 12)
     st.info("Adjust the slider to change how many months the model forecasts.")
     st.divider()
+    st.caption("Built with Streamlit + TensorFlow")
 
 loader = DataLoader("data/airline-passengers.csv")
 df = loader.load_data()
@@ -89,8 +188,27 @@ summary = get_dataset_summary(df)
 st.markdown(
     """
     <div class="hero-card">
-        <h1 style="margin-bottom:0.2rem;">✈️ Airline Passenger Analysis & Forecasting</h1>
-        <p style="margin:0; opacity:0.95;">Explore historical travel trends and generate future passenger forecasts with an RNN-based model.</p>
+        <div class="hero-inner">
+            <div class="hero-copy">
+                <div class="hero-pill">AI Forecasting Dashboard</div>
+                <h1>✈️ Airline Passenger Analysis & Forecasting</h1>
+                <p>Explore historical travel trends, understand seasonal movement, and generate future passenger forecasts with a sequence-based deep learning model.</p>
+                <div class="hero-callout">
+                    <strong>Fast insights, smoother planning.</strong>
+                    <p>Use the interactive dashboard to inspect past passenger counts, track model accuracy, and forecast future demand.</p>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-stat">
+                    <h3>Data points</h3>
+                    <p class="value">144</p>
+                </div>
+                <div class="hero-stat">
+                    <h3>History range</h3>
+                    <p class="value">Jan 1949 – Dec 1960</p>
+                </div>
+            </div>
+        </div>
     </div>
     """,
     unsafe_allow_html=True,
