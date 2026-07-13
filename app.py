@@ -320,4 +320,4 @@ if st.button("Run RNN Model", use_container_width=True):
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
             height=360,
         )
-        st.plotly_chart(fig_combined, use_container_width=True)
+        st.plotly_chart(fig_combined, width="stretch")
