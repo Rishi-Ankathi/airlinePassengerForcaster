@@ -74,7 +74,7 @@ class Predictor:
 
         print("Model size:", os.path.getsize(self.model_path))
 
-        model = load_model(self.model_path)
+        model = load_model(self.model_path, compile=False)
  
         print("\nModel Loaded Successfully.")
  
