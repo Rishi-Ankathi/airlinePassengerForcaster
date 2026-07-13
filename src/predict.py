@@ -11,7 +11,8 @@ Purpose: Predict Passenger Counts
  
 import joblib
 import numpy as np
- 
+import os
+
 from tensorflow.keras.models import load_model
  
 from .data_loader import DataLoader
@@ -67,7 +68,12 @@ class Predictor:
         # ----------------------------
         # Load Model
         # ----------------------------
- 
+        print("Current directory:", os.getcwd())
+
+        print("Model exists:", os.path.exists(self.model_path))
+
+        print("Model size:", os.path.getsize(self.model_path))
+
         model = load_model(self.model_path)
  
         print("\nModel Loaded Successfully.")

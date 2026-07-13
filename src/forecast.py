@@ -9,6 +9,8 @@ Purpose: Forecast Future Passenger Counts
 ====================================================
 """
  
+import os
+
 import numpy as np
 import joblib
  
@@ -51,7 +53,13 @@ class Forecaster:
         # --------------------------
         # Load Model
         # --------------------------
- 
+        print("Current directory:", os.getcwd())
+
+        print("Model exists:", os.path.exists(self.model_path))
+
+        print("Model size:", os.path.getsize(self.model_path))
+
+
         model = load_model(self.model_path)
  
         # --------------------------
