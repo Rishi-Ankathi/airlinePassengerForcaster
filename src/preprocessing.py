@@ -10,10 +10,16 @@ Purpose: Scale the dataset using MinMaxScaler
 """
  
 # Import required libraries
+from pathlib import Path
+
 import joblib
 import pandas as pd
- 
+
 from sklearn.preprocessing import MinMaxScaler
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+MODELS_DIR = PROJECT_ROOT / "models"
  
  
 class Preprocessor:
@@ -27,6 +33,7 @@ class Preprocessor:
         """
  
         self.scaler = MinMaxScaler(feature_range=(0, 1))
+        self.scaler_path = MODELS_DIR / "scaler.pkl"
  
     def scale_data(self, df):
         """
@@ -45,7 +52,10 @@ class Preprocessor:
         print(df.head())
  
         # Scale the Passengers column
-        scaled_values = self.scaler.fit_transform(df[["passengers"]])
+        try:
+            scaled_values = self.scaler.fit_transform(df[["passengers"]])
+        except Exception as e:
+            raise RuntimeError(f"Error scaling data: {e}")
  
         # Convert to DataFrame
         scaled_df = pd.DataFrame(
@@ -58,7 +68,11 @@ class Preprocessor:
         # print(scaled_df.head())
  
         # Save the scaler
-        joblib.dump(self.scaler, "models/scaler.pkl")
+        try:
+            MODELS_DIR.mkdir(exist_ok=True)
+            joblib.dump(self.scaler, self.scaler_path)
+        except Exception as e:
+            raise RuntimeError(f"Unable to save scaler: {e}")
  
         print("\nScaler saved successfully.")
  

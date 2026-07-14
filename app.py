@@ -8,6 +8,11 @@ from src.data_loader import DataLoader
 from src.forecast import Forecaster
 from src.evaluate import Evaluator
 
+PROJECT_ROOT = Path(__file__).resolve().parent
+ASSETS_DIR = PROJECT_ROOT / "assets"
+DATA_PATH = PROJECT_ROOT / "data" / "airline-passengers.csv"
+OUTPUTS_DIR = PROJECT_ROOT / "outputs"
+
 st.set_page_config(
     page_title="Airline Passenger Forecaster",
     page_icon="✈️",
@@ -174,14 +179,14 @@ def get_dataset_summary(df):
 load_custom_css()
 
 with st.sidebar:
-    st.image("assets/images.jpg", width=220, caption="Airline Passenger Forecasting")
+    st.image(str(ASSETS_DIR / "images.jpg"), width=220, caption="Airline Passenger Forecasting")
     st.markdown("### Controls")
     future_months = st.slider("Forecast Horizon (Months)", 1, 24, 12)
     st.info("Adjust the slider to change how many months the model forecasts.")
     st.divider()
     st.caption("Built with Streamlit + TensorFlow")
 
-loader = DataLoader("data/airline-passengers.csv")
+loader = DataLoader(str(DATA_PATH))
 df = loader.load_data()
 summary = get_dataset_summary(df)
 
@@ -225,7 +230,7 @@ tab1, tab2 = st.tabs(["🚀 Model Performance", "📈 Exploratory Data Analysis"
 with tab1:
     st.markdown('<div class="section-title">Model Accuracy Metrics</div>', unsafe_allow_html=True)
     try:
-        Path("outputs").mkdir(exist_ok=True)
+        OUTPUTS_DIR.mkdir(exist_ok=True)
         mae, mse, rmse = Evaluator().evaluate()
         m1, m2, m3 = st.columns(3)
         m1.metric("Mean Absolute Error (MAE)", f"{mae:.2f}")

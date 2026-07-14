@@ -10,10 +10,15 @@ Purpose: Load and validate the dataset
 """
  
 # Import required libraries
-import pandas as pd
 import os
- 
- 
+from pathlib import Path
+
+import pandas as pd
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+
 class DataLoader:
     """
     A class responsible for loading the time series dataset.
@@ -29,7 +34,9 @@ class DataLoader:
             Path of the CSV dataset.
         """
  
-        self.file_path = file_path
+        self.file_path = Path(file_path)
+        if not self.file_path.is_absolute():
+            self.file_path = PROJECT_ROOT / self.file_path
  
     def load_data(self):
         """
@@ -43,7 +50,7 @@ class DataLoader:
         # -----------------------------
         # Step 1 : Check file existence
         # -----------------------------
-        if not os.path.exists(self.file_path):
+        if not self.file_path.exists():
             raise FileNotFoundError(
                 f"Dataset not found at:\n{self.file_path}"
             )
@@ -53,8 +60,16 @@ class DataLoader:
         # -----------------------------
         # Step 2 : Read CSV
         # -----------------------------
-        df = pd.read_csv(self.file_path)
- 
+        
+        try:
+            df = pd.read_csv(self.file_path)
+        except pd.errors.EmptyDataError:
+            raise ValueError("Dataset is empty.")
+        except pd.errors.ParserError:
+            raise ValueError("Invalid CSV format.")
+        except Exception as e:
+            raise Exception(f"Error reading dataset: {e}")
+
         print("Dataset Loaded Successfully.\n")
  
         # -----------------------------
@@ -84,8 +99,15 @@ class DataLoader:
         # -----------------------------
         # Step 7 : Convert Month column
         # -----------------------------
-        df["month"] = pd.to_datetime(df["month"])
- 
+        if "month" not in df.columns:
+            raise ValueError("'month' column not found.")
+        print("\nConverting 'month' column to Datetime format.")
+        
+        try:
+            df["month"] = pd.to_datetime(df["month"])
+        except Exception:
+            raise ValueError("Invalid values found in 'month' column.")
+        
         print("\nData Types After Conversion")
         print(df.dtypes)
  

@@ -9,9 +9,10 @@ Purpose: Predict Passenger Counts
 ====================================================
 """
  
+from pathlib import Path
+
 import joblib
 import numpy as np
-import os
 
 from tensorflow.keras.models import load_model
  
@@ -21,16 +22,23 @@ from .sequence_generator import SequenceGenerator
 from .train_test_split import TimeSeriesSplit
  
  
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+MODELS_DIR = PROJECT_ROOT / "models"
+
+
 class Predictor:
- 
+
     def __init__(self):
- 
-        self.data_path = "data/airline-passengers.csv"
- 
-        self.model_path = "models/lstm_model.keras"
- 
-        self.scaler_path = "models/scaler.pkl"
- 
+
+        self.data_path = PROJECT_ROOT / "data" / "airline-passengers.csv"
+
+        self.model_paths = [
+            MODELS_DIR / "lstm_model.keras",
+            MODELS_DIR / "lstm_model.h5",
+        ]
+
+        self.scaler_path = MODELS_DIR / "scaler.pkl"
+
     def predict(self):
  
         # ----------------------------
@@ -68,13 +76,16 @@ class Predictor:
         # ----------------------------
         # Load Model
         # ----------------------------
-        print("Current directory:", os.getcwd())
+        model_path = None
+        for candidate in self.model_paths:
+            if candidate.exists():
+                model_path = candidate
+                break
 
-        print("Model exists:", os.path.exists(self.model_path))
+        if model_path is None:
+            raise FileNotFoundError(f"No trained model found in {MODELS_DIR}")
 
-        print("Model size:", os.path.getsize(self.model_path))
-
-        model = load_model(self.model_path, compile=False)
+        model = load_model(str(model_path), compile=False)
  
         print("\nModel Loaded Successfully.")
  
@@ -82,7 +93,7 @@ class Predictor:
         # Load Scaler
         # ----------------------------
  
-        scaler = joblib.load(self.scaler_path)
+        scaler = joblib.load(str(self.scaler_path))
  
         print("Scaler Loaded Successfully.")
  

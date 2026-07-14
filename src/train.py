@@ -7,18 +7,25 @@ Purpose: Train the LSTM Model
 ====================================================
 """
  
+from pathlib import Path
+
 from .data_loader import DataLoader
 from .preprocessing import Preprocessor
 from .sequence_generator import SequenceGenerator
 from .train_test_split import TimeSeriesSplit
 from .model import ModelBuilder
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DATA_PATH = PROJECT_ROOT / "data" / "airline-passengers.csv"
+MODELS_DIR = PROJECT_ROOT / "models"
  
  
 class ModelTrainer:
  
     def __init__(self):
  
-        self.data_path = "data/airline-passengers.csv"
+        self.data_path = DATA_PATH
  
     def train(self):
  
@@ -71,21 +78,17 @@ class ModelTrainer:
  
         print("\nTraining Started...\n")
  
-        history = model.fit(
- 
-            X_train,
- 
-            y_train,
- 
-            epochs=100,
- 
-            batch_size=8,
- 
-            validation_data=(X_test,y_test),
- 
-            verbose=1
- 
-        )
+        try:
+            history = model.fit(
+                X_train,
+                y_train,
+                epochs=100,
+                batch_size=8,
+                validation_data=(X_test, y_test),
+                verbose=1
+            )
+        except Exception as e:
+            raise RuntimeError(f"Model training failed: {e}")
  
         print("\nTraining Completed Successfully.")
  
@@ -93,8 +96,9 @@ class ModelTrainer:
         # Step 7 : Save Model
         # ----------------------------
  
-        #model.save("models/lstm_model.keras")
-        model.save("models/lstm_model.h5")
+        MODELS_DIR.mkdir(exist_ok=True)
+        model.save(str(MODELS_DIR / "lstm_model.keras"))
+        model.save(str(MODELS_DIR / "lstm_model.h5"))
  
         print("\nModel Saved Successfully.")
  
